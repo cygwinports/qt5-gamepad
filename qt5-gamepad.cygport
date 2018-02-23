@@ -1,0 +1,47 @@
+inherit qt5-qmake
+
+NAME="qt5-gamepad"
+VERSION=5.9.4
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="Qt C++ application framework (Gamepad library)"
+DESCRIPTION="Qt is a cross-platform application framework for desktop and
+embedded development. Qt enables programmers to create advanced GUI
+applications once and deploy them to Windows, Mac OS X and Linux without
+rewriting the source code. Companies using Qt can leverage software
+investments made on one platform across many others."
+HOMEPAGE="https://www.qt.io/"
+SRC_URI="http://download.qt.io/official_releases/qt/${VERSION%.*}/${VERSION}/submodules/qtgamepad-opensource-src-${VERSION}.tar.xz"
+SRC_DIR="qtgamepad-opensource-src-${VERSION}"
+
+PKG_NAMES="libQt5Gamepad5 libQt5Gamepad-devel ${NAME}-doc ${NAME}-examples"
+libQt5Gamepad5_CONTENTS="
+	usr/bin/cygQt5Gamepad-5.dll
+	usr/lib/qt5/plugins/gamepads/
+	usr/lib/qt5/qml/QtGamepad/
+	usr/share/doc/
+"
+libQt5Gamepad_devel_CONTENTS="
+	usr/include/qt5/QtGamepad/
+	usr/lib/cmake/Qt5Gamepad/
+	usr/lib/libQt5Gamepad.*
+	usr/lib/pkgconfig/Qt5Gamepad.pc
+	usr/lib/qt5/mkspecs/modules/qt_lib_gamepad.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_gamepad_private.pri
+"
+qt5_gamepad_doc_CATEGORY="Doc"
+qt5_gamepad_doc_CONTENTS="usr/share/qt5/doc/qtgamepad*"
+qt5_gamepad_examples_CATEGORY="X11"
+qt5_gamepad_examples_CONTENTS="usr/lib/qt5/examples/gamepad*/"
+
+src_compile() {
+	cd ${B}
+	cygqmake5 ${S}
+	cygmake
+	cygmake docs
+}
+
+src_install() {
+	cd ${B}
+	qt5_qmake_install install_docs
+}
